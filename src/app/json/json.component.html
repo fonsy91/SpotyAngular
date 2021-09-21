@@ -1,0 +1,35 @@
+
+    <h2>Componente Json</h2>
+    <p>Usaremos la pagina web <a href="https://jsonplaceholder.typicode.com/" target="_blank">https://jsonplaceholder.typicode.com/</a> para poder 
+    hacer esta prueba con Json. Para ello lo primero que debemos hacer es importar el modulo de HttpClient en el modulo 
+    principal app.module.ts.
+    Hemos hecho que el componente sea un servicio en el apartado de app.componet.ts hemos declarado un constructor y dentro lo 
+    siguiente this._http.get('https://jsonplaceholder.typicode.com/users').subscribe(data=> console.log(data)); 
+    Con esto y atraves de la URL del Json con los datos y el get obtenemos los datos y nos suscribimos para despues 
+    mostrar por consola todo el Json.
+    El modulo o paquete HttpClient se usa para realizar solicitudes a traves de metodos algunos de ellos son:  request(), delete(),
+    get(), head8), jsonp(), option(), patch(), post(), put(). Los cuales ya veremos mas adelante. Con suscribe lo que haces es que te 
+    den los datos consta de tres parametros el de los datos, el de error y el de finalizacion. 
+    </p>
+    <br><br>
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let j of usuarios">   
+            <th>{{j.id}}</th>
+            <th>{{j.name}}</th>
+            <th>{{j.username}}</th>
+            <th>{{j.email}}</th>
+        </tr>
+    </tbody>
+    <br><br>
+    <p>A partir de aqui hemos instalado angular material para que las vistas sena mas bonitas, </p>
+    <br><br>
+
+

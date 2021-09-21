@@ -1,0 +1,169 @@
+
+<h1 class="titulo">TYPSCRIPT</h1>
+<div class="padre">
+    <p>
+        En este apartado veremos una introduccion a typscript para poder utilizarlo luego en angular. TypeScript es 
+        un superconjunto escrito de JavaScript, lo que significa que todo el código JavaScript es un código TypeScript válido. 
+        Script agrega muchas características nuevas además de eso.
+        TypeScript hace que JavaScript sea más parecido a un lenguaje fuertemente orientado a objetos, similar a C # y Java. 
+    </p>
+    <br>
+
+    <h2>DECLRACIÓN DE TIPOS</h2>
+    <h3>Tipos Basicos: </h3>
+    <textarea class="textArea" name="" id="" cols="80" rows="10">
+
+        dato1: number = 28;
+        dato2: number = 12.5;
+        dato3: number = 0b110101;  //dato de tipo number en binario 
+        dato4: number = 0o452;     //dato de tipo number octal
+        dato5: number = 0xF42C;    //dato de tipo number hexadecimal
+        str1: string = 'Alfonso';
+        bool1: boolean = true;
+        cualquierCosa:  any = "Lo que sea"  // puede albergar cualquier cosa
+    </textarea>
+    <br>
+    <br>
+    <p>
+        Los Arrays tambien son un tipo basico de datos a continuacion lo veremos mas en detalle. Hay dos 
+        formas de declarar un array. Una matriz en TypeScript puede contener elementos de diferentes tipos 
+        de datos utilizando una sintaxis de tipo de matriz genérica, como se muestra a continuación.
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="80" rows="9">
+
+        frutas: string[] = ['Pera','Manzana','Naranja'];
+        coches: Array<string> = ['Ford','Mercedes','Renaul'];
+        vacio: [] = []  //array vacio 
+
+        //arrays con elementos diferentes 
+        val1: (string | number)[] = ['Apple', 2, 'Orange', 3, 4, 'Banana'];
+        val2: Array<string | number> = ['Apple', 2, 'Orange', 3, 4, 'Banana'];
+    </textarea>
+    <br>
+    <br>
+    <textarea class="textArea" name="" id="" cols="120" rows="18">
+
+        pop():  Elimina el último elemento de la matriz y devuelve ese elemento
+        push(): Agrega nuevos elementos a la matriz y devuelve la nueva longitud de la matriz
+        sort(): Ordena todos los elementos de la matriz
+        concat(): Une dos matrices y devuelve el resultado combinado
+        indexOf(): Devuelve el índice de la primera coincidencia de un valor en la matriz (-1 si no se encuentra)
+        copyWithin(): Copia una secuencia de elementos dentro de la matriz.
+        fill(): Llena la matriz con un valor estático desde el índice inicial proporcionado hasta el índice final
+        shift(): Elimina y devuelve el primer elemento de la matriz.
+        splice(): Agrega o elimina elementos de la matriz
+        unshift(): Agrega uno o más elementos al comienzo de la matriz
+        includes(): Comprueba si la matriz contiene un determinado elemento.
+        join(): Une todos los elementos de la matriz en una cadena
+        lastIndexOf(): Devuelve el último índice de un elemento de la matriz.
+        slice(): Extrae una sección de la matriz y devuelve la nueva matriz
+        toString(): Devuelve una representación de cadena de la matriz
+        toLocaleString(): Devuelve una cadena localizada que representa la matriz.
+    </textarea>
+    <br>
+    <br>
+    <h2>FUNCIONES</h2>
+    <ul>
+        <li>Funciones con nombre</li>
+        <li>Funciones anonimas</li>
+        <li>Funciones Lambda</li>
+        <li>Funciones definidas en las clases</li>
+    </ul>
+    <br>
+    <textarea class="textArea" name="" id="" cols="70" rows="7">
+        //funciones con nombre 
+        foo1(msg: string) { console.log(msg); }
+        //funcion anonima
+        foo2 = function(x: number, y: number): number { return x+y; }
+        //funcion lambda la flecha equivale al return 
+        foo3 = (x: number, y: number) => x+y;
+    </textarea>
+    <br>
+    <br>
+    <h2>CLASES E INTERFACES</h2>
+    <br>
+    <textarea class="textArea" name="" id="" cols="86" rows="63">
+        //Clase Pelicual
+        export class Pelicula{
+
+            //atributos 
+            id: number;
+            pelicula: string;
+            director: string;
+            anio: number;
+        
+            //constructor 
+            constructor(id: number, pelicula: string, director: string, anio: number){
+                this.id=id;
+                this.pelicula = pelicula;
+                this.director = director;
+                this.anio = anio;
+            }
+        
+            //Metodos y funciones de la clase 
+            mostrarPelicula(){
+                return "ID: "+this.id+" Pelicual: "+this.pelicula+" Director: "+
+                this.director+" Año: "+this.anio;
+            }
+        }
+
+        //Declaracion en .ts
+        peliculas = [
+            new Pelicula(1,"Vengadores","Stallin",2019),
+            new Pelicula(2,"Malditos","Juaquin",2018),
+            new Pelicula(3,"Mafalda","Sofia",1889)
+        ]
+        //pelicula independiente 
+        pelicual1 = new Pelicula(1,"Doctor Strange","Juan",2020);
+
+        //Archivo Interface
+        export interface Cliente{
+    
+            nombre: String;
+            cif: String;
+            direccion: String;
+            creado: Date;    
+        }
+        
+        //Declaracion en .ts y metodos/funciones
+        clientes: Cliente[] = [];
+        cliente1: Cliente;
+
+        //metodo para añadir clientes
+        clienteNuevo(): Cliente{
+            return{
+            nombre:'Alfonso',
+            cif:'5077879',
+            direccion:'Madera Alta',
+            creado: new Date(Date.now())
+            }
+        }
+
+        //añadir cliente 
+        añadirCliente(cliente: Cliente){
+            this.clientes.push(cliente);
+        }
+    </textarea>
+    <br>
+    <br>
+    <p>Para hacer un ejemplo mostraremos los datos por pantalla en este caso de la clase.</p>
+    <br>
+    <h3>Primera Pelicula del array: </h3>
+    <p>Pelicula: {{peliculas[0]["pelicula"]}}</p>
+    <p>Director: {{peliculas[0]["director"]}}</p>
+    <p>Año: {{peliculas[0]["anio"]}}</p>
+    <br>
+    <h3>Listado de las peliculas: </h3>
+    <ul>
+        <li *ngFor="let peli of peliculas">
+            <p>Titulo: {{peli.pelicula}}</p>
+            <p>Director: {{peli.director}}</p>
+            <p>Año: {{peli.anio}}</p>
+        </li>
+    </ul>
+
+    <br>
+    <br>
+
+</div>

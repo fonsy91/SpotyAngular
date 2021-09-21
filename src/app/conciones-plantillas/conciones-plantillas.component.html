@@ -1,0 +1,137 @@
+<h1 class="titulo">Condiciones y Plantillas</h1>
+<div class="padre">
+    <p>
+        Hemos creado en el .ts una variable islogged la cual esta inicializada en false, hemos creado tres botones 
+        y los hemos adornado con angular material para una vista mas formal y bonita para hacer uso de condicionales 
+        usamos la directiva *ngIf en un primer caso estara !isLogged lo cual nos dice que se podra ver el boton en la pantalla
+        en caso de quitar ! no se veria. Lo segundo a tener en cuanta es que hemos usado los Angular tempaltes mas concreto 
+        ng-container que es es esto de los templates?. Un template es el código HTML que representa una vista. Esta vista describe 
+        a Angular cómo se debe renderizar el componente al que está asociado, como un contendor que va a agrupar lo que tengamos 
+        dentro y le vamos a aplicar el *ngIf al container, despues definimos un template con un nombre (#name) seria Iniciar sesion 
+        y registrarse estarian activos siempre y si inicias sesion accederias a el tempalte creado donde aparecerian los otros
+        botones finalmente si pulsas cerrar sesion volverias al incio. Tambien hay un par de botones donde puedes incrementar y 
+        decrementar el nivel de VIP esto hara que aparezca o desaparezca el template. La pagina del curso es la siguiente 
+        https://www.youtube.com/watch?v=pkFffdGfY24&list=PLezsbUDiwcpmhNiMzVPYJXV0Rqn71G4PU&index=3 y otra pagina donde aprender 
+        angular seria esta https://desarrolloweb.com/articulos/codigo-aplicacion-angular.html
+    </p>
+      
+    <section>
+        <br>
+        <ng-container *ngIf="!islogged; else logeado">
+            <div class="example-button-row">
+                <button (click)="islogged = true" mat-raised-button color="primary">Iniciar sesión</button>
+                <button  mat-raised-button color="primary">Registrarse</button>
+                <button (click)="nivel=nivel+1" mat-raised-button color="primary">Subir nivel VIP</button>
+                <button (click)="nivel=nivel-1" mat-raised-button color="primary">Bajar nivel VIP</button>
+                <div class="nivel">{{ nivel }}</div>
+                
+            </div>
+        </ng-container>
+        <br>
+        <ng-template #logeado>
+            <button mat-raised-button color="primary">Ir Administracion</button>
+            <button mat-raised-button color="primary">Ir a mi perfil</button>
+            <button (click)="islogged = false" mat-raised-button color="primary">Cerrar sesión</button>
+        </ng-template>
+        <br>
+        <p>Segun el nivel de VIP que tengas podras acceder a otras caracteristicas: </p>
+        <button *ngIf="nivel >= 10" mat-raised-button color="primary">Habitacion VIP</button>
+
+        <br>
+        <br>
+        <!--CON ESTO MOSTRAMOS EL CODIGO EN NUESTRA PAGINA WEB O APLICACION-->
+        <textarea class="textArea" id="" cols="120" rows="20" spellcheck="false">
+            <br>
+            <ng-container *ngIf="!islogged; else logeado">
+                <div class="example-button-row">
+                    <button (click)="islogged = true" mat-raised-button color="primary">Iniciar sesión</button>
+                    <button  mat-raised-button color="primary">Registrarse</button>
+                    <button (click)="nivel=nivel+1" mat-raised-button color="primary">Subir nivel VIP</button>
+                    <button (click)="nivel=nivel-1" mat-raised-button color="primary">Bajar nivel VIP</button>
+                    <div class="nivel">{{ nivel }}</div>   
+                </div>
+            </ng-container>
+            <br>
+            <ng-template #logeado>
+                <button mat-raised-button color="primary">Ir Administracion</button>
+                <button mat-raised-button color="primary">Ir a mi perfil</button>
+                <button (click)="islogged = false" mat-raised-button color="primary">Cerrar sesión</button>
+            </ng-template>
+            <br>
+            <p>Segun el nivel de VIP que tengas podras acceder a otras caracteristicas: </p>
+            <button *ngIf="nivel >= 10" mat-raised-button color="primary">Habitacion VIP</button>
+        </textarea>
+        <br>
+        <br>
+        <br>
+        <h2>Interfaces, Numeraciones y Casting</h2>
+        <p>Crearemos una interfaz para definir la forma de tus objetos indicando el nombre y el tipo de dato que es 
+            despues debemos importarlo en el componente donde se van a usar para la creacion del interfaz nos vamos a
+            nuestro componente dentro del proyecto y creamos un archivo con extension ts y definimos nuestra interfaz.
+            Una vez hecho esto nos dirigimoms al .ts del componente y declaramos el objeto realmente con datos.  
+        </p>
+        <br>
+        <textarea class="textArea"  cols="54" rows="8">
+            export interface Usuario{
+                ID: number,
+                Nombre: string,
+                Apellidos: string,
+                Nick: string,
+                Email: string,
+                Contraseña: string
+            }
+        </textarea>
+        <br>
+        <p>Una vez creado ese objeto con los datos rellenos tambien podemos castear ese objeto a una interfaze de la siguinete 
+            manera:
+        </p>
+        <br>
+        <textarea class="textArea"  cols="54" rows="8">
+            user: Usuario= <Usuario>{
+                ID: 23,
+                Nombre: "Alfonso",
+                Apellidos: "Muñoz Casado",
+                Nick: "Fonsy",
+                Email: "alf@gmail.com",
+                Contraseña: "1234",
+                Tipo: TipoUsuario.Administrador
+              }
+        </textarea>
+        <br>
+        <br>
+        <div>
+            <p>Los datos del usuarios mostrados en pantalla serían los siguientes: </p>
+            <br>
+            <div>ID: {{ user.ID }}</div>
+            <div>Nombre: {{ user.Nombre }}</div>
+            <div>Apellidos: {{ user.Apellidos }}</div>
+            <div>Nick: {{ user.Nick }}</div>
+            <div>Email: {{ user.Email }}</div>
+            <div>Contraseña: {{ user.Contrasena }}</div>
+            <div>Tipo: {{ user.Tipo }}</div>
+            <br>
+            <br>
+            <textarea class="textArea"  cols="54" rows="8">
+                <div>ID: {{ user.ID }}</div>
+                <div>Nombre: {{ user.Nombre }}</div>
+                <div>Apellidos: {{ user.Apellidos }}</div>
+                <div>Nick: {{ user.Nick }}</div>
+                <div>Email: {{ user.Email }}</div>
+                <div>Contraseña: {{ user.Contrasena }}</div>
+                <div>Tipo: {{ user.Tipo }}</div>
+            </textarea>
+            <br>
+            <br>
+
+            <!--
+            <ul>
+                <li *ngFor="let item of dataUno">
+                    {{item}}
+                </li>
+            </ul>
+            -->
+        </div>
+
+      </section>
+
+</div>

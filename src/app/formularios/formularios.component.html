@@ -1,0 +1,116 @@
+<h1 class="titulo">Formularios Básicos</h1>
+<div class="padre">
+    <p>
+        Entra en acción el FormBuilder, un servicio del que han de depender los componentes que quieran desacoplar el modelo 
+        de la vista. Se usa para construir un formulario creando un FormGroup, (un grupo de controles) que realiza un 
+        seguimiento del valor y estado de cambio y validez de los datos.Para poder usarlo tenemos que importar el módulo 
+        de Angular en el que viene declarado, el ReactiveFormModule. Para este formulario cada uno de los campos estara vacio 
+        y el boton desactivado y hasta que no se rellenen todos los campos obligatorios no se podra acceder al boton. Con la funcion
+        (ngSubmit)="enviar(signUpForm.value)" se recogern todos los datos en formato JSON 
+    </p>
+    <br>
+    <form [formGroup]="signUpForm" (ngSubmit)="enviar(signUpForm.value)">
+        <p>
+            <mat-form-field appearance="legacy">
+              <mat-label>Nombre</mat-label>
+              <input formControlName="nombre" type="text" matInput placeholder="">
+              <mat-hint>Nombre</mat-hint>
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+              <mat-label>Usuario</mat-label>
+              <input formControlName="usuario" type="text" matInput placeholder="">
+              <mat-hint>Usuario</mat-hint>
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+              <mat-label>Email</mat-label>
+              <input formControlName="email" type="email" matInput placeholder="ejem@gmail.com">
+              <mat-hint>Email</mat-hint>
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+              <mat-label>Contraseña</mat-label>
+              <input formControlName="clave" type="password" matInput placeholder="">
+              <mat-hint>Contraseña</mat-hint>
+            </mat-form-field>
+        </p>
+        <br>
+        <button [disabled]="signUpForm.invalid" type="submit" mat-raised-button color="primary">Registrarse</button>
+    </form>
+    <br>
+    <br>
+    <p>El codigo HTML de este apartado es el siguiente:</p>
+    <textarea class="textArea" name="" id="" cols="120" rows="34">
+        <form [formGroup]="signUpForm" (ngSubmit)="enviar(signUpForm.value)">
+            <p>
+                <mat-form-field appearance="legacy">
+                  <mat-label>Nombre</mat-label>
+                  <input formControlName="nombre" type="text" matInput placeholder="">
+                  <mat-hint>Nombre</mat-hint>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="legacy">
+                  <mat-label>Usuario</mat-label>
+                  <input formControlName="usuario" type="text" matInput placeholder="">
+                  <mat-hint>Usuario</mat-hint>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="legacy">
+                  <mat-label>Email</mat-label>
+                  <input formControlName="email" type="email" matInput placeholder="ejem@gmail.com">
+                  <mat-hint>Email</mat-hint>
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field appearance="legacy">
+                  <mat-label>Contraseña</mat-label>
+                  <input formControlName="clave" type="password" matInput placeholder="">
+                  <mat-hint>Contraseña</mat-hint>
+                </mat-form-field>
+            </p>
+            <br>
+            <button [disabled]="signUpForm.invalid" type="submit" mat-raised-button color="primary">Registrarse</button>
+        </form>
+    </textarea>
+    <br>
+    <br>
+    <p>Y la parte de typscript es donde se encuentran los validadores y la funcion enviar() del boton 
+        registrarse la cual es de tipo submit se usa para poder enviar los datos del formulario al back-end el 
+        codigo es el siguiente: 
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="120" rows="24">
+        export class FormulariosComponent implements OnInit {
+
+            signUpForm: FormGroup
+          
+            constructor(private _builder: FormBuilder) { 
+              this.signUpForm = this._builder.group({
+                nombre: [''] ,
+                usuario: ['', Validators.required],
+                email: ['', Validators.compose([Validators.email, Validators.required])],
+                clave: ['', Validators.required]
+              })
+            }
+          
+            ngOnInit(): void {
+            }
+          
+            //Funcion que recoge los valores del formulario
+            enviar(values){
+              console.log(values);
+            }
+          
+          
+          }
+    </textarea>
+    <br>
+    <br>
+
+</div>

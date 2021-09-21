@@ -1,0 +1,214 @@
+<h1 class="titulo">EJEMPLO SPOTIFY</h1>
+<div class="padre">
+    <p>
+        En este apartado veremos el uso basico del decorador viewchild para ello hemos creado dos componentes, el padre 
+        y el hijo gracias a este decorador podemos acceder a los componentes ya sean variables, etiquetas del hijo y poder 
+        cambiar el titulo entre otras muchas cosas el codigo de este apartado lo veremos mas abajo: 
+    </p>
+    <br>
+    <h2>Mostrando Datos de peticion API</h2>
+    <br>
+    <h3 class="titulo3">Mejores Temas</h3>
+    
+
+    <!--GRID PARA VISUALIZACION-->
+    
+    <body>
+        <div class="child-page-listing">
+            <div class="grid-container">
+                <article id="3685" class="location-listing">
+                    <a class="location-title">{{albums20[0]?.name}}</a>
+                    <div class="location-image">
+                        <a href=""><img  src="{{albums20[0]?.images[0]?.url}}" alt="{{albums20[0]?.name}}"></a>
+                    </div>
+                </article>
+                
+                <article id="3685" class="location-listing">
+                    <a class="location-title">{{albums20[1]?.name}}</a>
+                    <div class="location-image">
+                        <a href=""><img  src="{{albums20[1]?.images[0]?.url}}" alt="{{albums20[1]?.name}}"></a>
+                    </div>
+                </article>
+                
+                <article id="3685" class="location-listing">
+                    <a class="location-title">{{albums20[2]?.name}}</a>
+                    <div class="location-image">
+                        <a href=""><img  src="{{albums20[2]?.images[0]?.url}}" alt="{{albums20[2]?.name}}"></a>
+                    </div>
+                </article>
+
+                <article id="3685" class="location-listing">
+                    <a class="location-title">{{albums20[3]?.name}}</a>
+                    <div class="location-image">
+                        <a href=""><img  src="{{albums20[3]?.images[0]?.url}}" alt="{{albums20[3]?.name}}"></a>
+                    </div>
+                </article>
+
+                <article id="3685" class="location-listing">
+                    <a class="location-title">{{albums20[4]?.name}}</a>
+                    <div class="location-image">
+                        <a href=""><img  src="{{albums20[4]?.images[0]?.url}}" alt="{{albums20[4]?.name}}"></a>
+                    </div>
+                </article>
+
+                <article id="3685" class="location-listing">
+                    <a class="location-title">{{albums20[5]?.name}}</a>
+                    <div class="location-image">
+                        <a href=""><img  src="{{albums20[5]?.images[0]?.url}}" alt="{{albums20[5]?.name}}"></a>
+                    </div>
+                </article>
+
+                <article id="3685" class="location-listing">
+                    <a class="location-title">{{albums20[6]?.name}}</a>
+                    <div class="location-image">
+                        <a href=""><img  src="{{albums20[6]?.images[0]?.url}}" alt="{{albums20[6]?.name}}"></a>
+                    </div>
+                </article>
+
+                <article id="3685" class="location-listing">
+                    <a class="location-title">{{albums20[7]?.name}}</a>
+                    <div class="location-image">
+                        <a href=""><img  src="{{albums20[7]?.images[0]?.url}}" alt="{{albums20[7]?.name}}"></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <br>
+        <br>
+        <!--
+            <audio controls autoplay>
+            <source src="{{albums20[0]?.external_urls?.spotify}}" type="audio/ogg">
+            <source src="{{albums20[0]?.external_urls?.spotify}}" type="audio/mpeg">
+            <source src="{{albums20[0]?.external_urls?.spotify}}" type="audio/wav">
+            <p>Tu navegador no sporta HTML</p>
+        </audio>
+
+        -->
+
+       <!--
+         <iframe src="https://open.spotify.com/embed/album/0qfW7kihqHpsg0Seoj5ap0" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+         <iframe [src]="mapURL" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+       
+       -->
+       
+       
+       <h3>Mostrar Array ids</h3>
+       <div>
+           <ul>
+               <li *ngFor="let item of arrIDS">
+                   <p>ID: {{item}}</p>
+                   
+               </li>
+           </ul>
+       </div>
+
+       <!--Aqui mostramos todas las canciones que nos devuelve la API
+        <div *ngFor="let vid of sanitizedVideos; let i = index" (ondrag)="trackByMethod(vid,i)">
+        <iframe [src]='vid' width="300" height="90" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+       </div>
+       -->
+       <br>
+       <div *ngFor="let vid of sanitizedVideos; let i = index" (ondrag)="trackByMethod(vid,i)">
+        <iframe [src]='vid' width="300" height="90" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+       </div>
+
+       
+
+       
+
+    </body>
+    
+    <!--
+        https://www.youtube.com/watch?v=Xv63WnUGFYg&list=PLezsbUDiwcpmhNiMzVPYJXV0Rqn71G4PU&index=25
+        https://developer.spotify.com/console/get-new-releases/?country=&limit=&offset=
+        https://developer.spotify.com/documentation/widgets/generate/embed/
+    -->
+
+    
+    
+</div>
+
+<!--ESTILOS BASICOS-->
+<!--https://webdesign.tutsplus.com/es/tutorials/create-a-css-grid-image-gallery-with-blur-effect-and-interaction-media-queries--cms-32287-->
+<style>
+    .titulo3{
+        text-align: center;    
+    }
+    
+    body {
+    padding: 20px;
+    font-family: sans-serif;
+    background: #f2f2f2;
+    }
+
+    img {
+    width: 100%; /* need to overwrite inline dimensions */
+    height: auto;
+    }
+
+    .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 1em;
+    }
+
+
+    /* hover styles */
+    .location-listing {
+    position: relative;
+    }
+
+    .location-image {
+    line-height: 0;
+    overflow: hidden;
+    }
+
+    .location-image img {
+    filter: blur(0px);
+    transition: filter 0.3s ease-in;
+    transform: scale(1.1);
+    }
+
+    .location-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+    z-index: 1;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity .5s;
+    background: rgba(90,0,10,0.4);
+    color: white;
+    
+    /* position the text in t’ middle*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+    .location-listing:hover .location-title {
+    opacity: 1;
+    }
+
+    .location-listing:hover .location-image img {
+    filter: blur(2px);
+    }
+
+
+    /* for touch screen devices */
+    @media (hover: none) { 
+    .location-title {
+        opacity: 1;
+    }
+    .location-image img {
+        filter: blur(2px);
+    }
+    }
+    
+
+</style>
+

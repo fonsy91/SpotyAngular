@@ -1,0 +1,304 @@
+<h1 class="titulo">Object y Observables (RxJS)</h1>
+<div class="padre">
+    <p>
+        En este apartado veremos una serie de conceptos importantes, empezaremos hablando de la programación reactiva 
+        En programación reactiva se pueden crear flujos (streams) a partir de cualquier cosa, como podría ser los valores 
+        que una variable tome a lo largo del tiempo. Todo puede ser un flujo de datos, como los clics sobre un botón, 
+        cambios en una estructura de datos, una consulta para traer un JSON del servidor etc.
+        Para poder hacer esto angular utiliza el patron Obervable, que básicamente pone en funcionamiento diversos 
+        actores para producir los efectos deseados, que es reaccionar ante el flujo de los distintos eventos producidos.
+        Los componentes principales de este patrón son:
+
+        <li>
+            Observable: Es aquello que queremos observar, que será implementado mediante una colección de eventos o valores futuros. 
+            Un observable puede ser creado a partir de eventos de usuario derivados del uso de un formulario, una llamada HTTP, un 
+            almacén de datos, etc. Mediante el observable nos podemos suscribir a eventos que nos permiten hacer cosas cuando cambia 
+            lo que se esté observando.
+        </li> 
+        <li>
+            Observer: Es el actor que se dedica a observar. Básicamente se implementa mediante una colección de funciones callback 
+            que nos permiten escuchar los eventos o valores emitidos por un observable. Las callbacks permitirán especificar código 
+            a ejecutar frente a un dato en el flujo, un error o el final del flujo.
+        </li>
+        <li>
+            Subject: es el emisor de eventos, que es capaz de crear el flujo de eventos cuando el observable sufre cambios. 
+            Esos eventos serán los que se consuman en los observers.
+        </li>
+        <br>
+        Antes de Empezar a usar Observables vamos a crera una aplicacion sencilla de alta de clientes y mostrado de los 
+        mismos y despues aplciaremos los observables para ver la ventaja de los mismos. Este ejercicio se encuentra en la 
+        sigueinte direccion: https://desarrolloweb.com/articulos/practica-angular-modulos-componentes-servicios.html
+        <br>
+        <br>
+        <app-alta-cliente></app-alta-cliente>
+        <app-listado-cliente></app-listado-cliente>
+        <br>
+        El cidigo completo del ejemplo anterior es el sigueinte consta de los sigueintes archivos: cliente.model.ts en el cual
+        se definen los tipos de datos, clientes.service.ts donde se encuentra toda la logica de la aplicacion, y dos componentes
+        alta-cliente y listado-cliente.
+    </p>
+    <textarea class="textArea" name="" id="" cols="100" rows="60">
+        <!--cliente.model.ts-->
+        export interface Cliente{
+            id: number;
+            nombre: string;
+            cif: string;
+            direccion: string;
+            grupo: number;
+        }
+        
+        export interface Grupo{
+            id: number;
+            nombre: string;
+        }
+        <!--clientes.service.ts-->
+        @Injectable()
+        export class ClientesService {
+
+            private clientes: Cliente[];
+            private grupos: Grupo[];
+
+            constructor(){
+                this.grupos=[
+                    {
+                        id: 0,
+                        nombre: 'Sin definir'
+                    },
+                    {
+                        id: 1,
+                        nombre: 'Activos'
+                    },
+                    {
+                        id: 2,
+                        nombre: 'Inactivos'
+                    },
+                    {
+                        id: 3,
+                        nombre: 'Deudores'
+                    },
+                ];
+
+                this.clientes = [];
+            }
+
+            //METODOS
+            //Metodo para obtener los grupos
+            getGrupos(){
+                return this.grupos;
+            }
+            //metodo para obtener los clientes
+            getClientes(){
+                return this.clientes;
+            }
+            //metodo agregar a la lista de clientes 
+            agregarCliente(cliente: Cliente){
+                this.clientes.push(cliente);
+                //emitimos un evento usando el subject
+                this.clientes$.next(this.clientes);
+            }
+            //metodo para crear un nuevo cliente 
+            nuevoCliente(): Cliente{
+                return{
+                    id: this.clientes.length,
+                    nombre: '',
+                    cif: '',
+                    direccion: '',
+                    grupo: 0
+                };
+            }
+        }
+        <!--Componenete Alta cliente .ts y HTML-->
+        export class AltaClienteComponent implements OnInit {
+
+            //variables de tipo Cliente y Grupo 
+            cliente: Cliente;
+            grupos: Grupo[];
+          
+            constructor(private clienteService: ClientesService) { }
+          
+            ngOnInit(): void {
+              this.cliente = this.clienteService.nuevoCliente();
+              this.grupos = this.clienteService.getGrupos();
+            }
+          
+            //Funcion que crea un nuevo cliente 
+            nuevoCliente(): void{
+              this.clienteService.agregarCliente(this.cliente);
+              this.cliente = this.clienteService.nuevoCliente();
+            }
+          }
+          <!--HTML-->
+          <h2>Alta cliente</h2>
+            <p>
+            <span>Nombre:</span>
+            <input type="text" [(ngModel)]="cliente.nombre">
+            </p>
+            <p>
+            <span>CIF:</span>
+            <input type="text" [(ngModel)]="cliente.cif">
+            </p>
+            <p>
+            <span>Dirección:</span>
+            <input type="text" [(ngModel)]="cliente.direccion">
+            </p>
+            <p>
+            <span>Grupo:</span>
+            <select [(ngModel)]="cliente.grupo">
+                <option *ngFor="let grupo of grupos" value="{{"grupo.id"}}">{{"grupo.nombre"}}</option>
+            </select>
+            </p>
+            <p>
+            <button (click)="this.nuevoCliente()">Guardar</button>
+            </p>
+            <!--Componenete  listado-cliente .ts y HTML-->
+            export class ListadoClienteComponent implements OnInit {
+
+                clientes: Cliente[];
+              
+                constructor(private clientesService: ClientesService) { }
+              
+                ngOnInit(): void {
+                  this.clientes = this.clientesService.getClientes();
+                }
+              
+            }
+            <!--HTML-->
+            <h2>
+            Listado clientes
+            </h2>
+            <div *ngIf="! clientes.length">No hay clientes por el momento</div>
+            <div>
+                <article *ngFor="let cliente of clientes">
+                    <span>{{"cliente.nombre"}}</span>
+                    <span>{{"cliente.cif"}}</span>
+                    <span>{{"cliente.direccion"}}</span>
+                    <span>{{"cliente.grupo"}}</span>
+                </article>
+            </div>
+    </textarea>
+    <br>
+    <br>
+    <p>Una vez hecho este ejemplo vamos a ver como poder usar observables para el mismo ejemplo haciendol mas optimo.
+        El servicio que implementa toda la parte de acceso a los datos, con la lógica de negocio de la aplicación, es el encargado 
+        de generar los eventos que los observadores podrán consumir. El servicio tiene por tanto que conocer la implementación de dos clases:
+        <li>El subject, para generar el stream de eventos</li>
+        <li>El observable, que entregarán bajo demanda a los observadores</li>
+        El codigo que hemos añadido para poder usar observables es el siguiente: 
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="80" rows="29">
+        <!--En cliente.service.ts-->
+        private clientes$ = new Subject<Cliente[]>();
+
+        //metodo para obtener los clientes
+        // Este método ya no lo usaré
+        // Ya que nadie va a usar el array de clientes directamente
+        // En vez de ello, usaremos el observable.
+        //getClientes(){
+        //    return this.clientes;
+        //}
+
+        getClientes$(): Observable<Cliente[]>{
+            return this.clientes$.asObservable();
+        }
+        //metodo agregar a la lista de clientes 
+        agregarCliente(cliente: Cliente){
+            this.clientes.push(cliente);
+            //emitimos un evento usando el subject
+            this.clientes$.next(this.clientes);
+        }
+        <!--En el componente que se va a esatr obervando se situa el 
+        el siguiente codigo osea en listado-clientes.component.ts-->
+        cliente$: Observable<Cliente[]>;
+
+        ngOnInit(): void {
+            this.cliente$ = this.clientesService.getClientes$();
+            this.cliente$.subscribe(clientes => this.clientes = clientes);
+          }
+    </textarea>
+    <br>
+    <br>
+    <h2>Libreria RxJS</h2>
+    <p>Para la realizacion de esta practica introductoria usaremos el video explicativo del siguiente enlace: 
+        https://www.youtube.com/watch?v=p_Aa2B1V5vk
+        <li>Para acercarnos a lo mas basico de la libreria RxJS y lo que son los observables empezaremos con 
+            un ejemplo muy basico. Lo primeroq que hay que hacer es importar la libreria de Observable una vez hecho 
+            esto crearemos una propiedad llamada numbers$ con un interval de 1 segundo de tipo observable despues en el ngOnInit()
+            accederemos con this a dicha propiedad y nos suscribiremos al observable para poder ver por consola lo que arroja 
+            el codigo de este pequeño ejemplo es el siguiente: 
+        </li>
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="10">
+        //propiedad privada de tipo observable 
+        numbers$: Observable<number> = interval(1000);
+
+        ngOnInit(): void {
+            //Obtenemos por pantalla consola cada segundo lo siguiente: Result 0, Result 1 ....
+            //nos subscribimos al observable (el que esta mirando) y despues mostramos con suscribe 
+            //dichos valores en consola.
+            this.numbers$.subscribe(value => console.log('Result',value))
+        }
+    </textarea>
+    <br>
+    <br>
+    <p>
+        <li>Streams: es un flujo de datos que puede ser de lectura o escritura de ficheros ya sea una apertura 
+            de un fichero de datos, una Query de una base de datos, o peticion a una API.
+        </li>
+        <li>Operators: nos permiten el manejo de eventos asincronos, existen unos 110 operadores a continuacion 
+            vamos a ver unos ejemplos de algunos de los mas importantes.
+        </li>
+        <br>
+        Los operadores of() y from() pueden convertir arrays, prmesas, objetos y de todo a tipo observable, un 
+        pequeño ejemplo de codigo sería: 
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="13">
+        //Array para hacer ejemplo de operadores
+        myArray = [10,20,30];
+        //Propiedad de tipo observable para los operadores 
+        myArrayof$: Observable<any>;
+        
+        ngOnInit(): void {
+            //Operadores 
+            //Queremos convertir myArray en un observable a partir del operador of()
+            this.myArrayof$ = of(this.myArray);
+            this.myArrayof$.subscribe(data => console.log('DataOf',data));
+            //Para el operador from() realiza lo mismo que of pero con mas variaedad 
+        }
+    </textarea>
+    <br>
+    <br>
+    <p>Los operadores tap() y map() permiten iterar sobre objetos o cosas iterables la diferencia entre ambos es 
+        que tap permite solo iterar y map ademas puede operar con los elementos del objeto o cosa iterable. 
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="130" rows="8">
+        this.myArrayfrom$ = from(this.myArray);
+        this.myArrayfrom$.pipe(tap(data => console.log('DataTap', data))).subscribe(data => console.log('DataTap2', data));
+        //el operador tap te permite iterar sobre un objeto iterable pero no te permite por ejemplo hacer operaciones 
+        //con los datos que itera para ello utiliza el operador map
+        this.myArrayfrom$.pipe(map(data => data*2)).subscribe(data => console.log('DataMap2', data));
+    </textarea>
+    <br>
+    <br>
+    <p>RxJS Subjects: Tienen el mismo comportamiento que un observable, pero este puede compartir data 
+        con varios observadores u observers existen: Subjetc, Behavior subject, Replay subject y Async subject.
+        Es importante no confundir tuberias en angular con la funcion pipe() de la libreria RxJS la cual se usa 
+        para combinar multiples funciones en una sola funcion, toma como argumentos las funciones que se desea combinar 
+        y devuelve una nueva funcion que cuando se ejecuta, ejecuta las funciones compuestas en secuencia. 
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="5">
+        <!--Subjects es multicast-->
+        this.subject.pipe(tap(val => console.log(val))).subscribe();
+        this.subject.next(Math.random());
+        this.subject.next(Math.random());
+    </textarea>
+    <br>
+    <br>
+    <h2>Documenatción oficial de RxJS</h2>
+    <p>MAS INFORMACIÓN PROXIMAMENTE dir: https://rxjs.dev/guide/observable</p>
+    <br>
+</div>

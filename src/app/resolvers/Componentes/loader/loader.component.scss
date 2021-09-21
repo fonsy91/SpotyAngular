@@ -1,0 +1,27 @@
+
+:host{
+    display: block;
+}
+
+.container{
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(white, .75);
+    
+    .loader{
+        position: fixed;
+        top: 70px;
+        right: 0;
+        margin: auto;
+        width: 100px;
+        height: 100px;
+        background-image: url(^assets/loader.gif);        
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+

@@ -1,0 +1,122 @@
+<h1 class="titulo">PAGINACIÓN Y PIPES</h1>
+<div class="padre">
+    <p>
+        En este apartado veremos hacer una paginacion de una lista de objetos los cuales se van mostrando, los
+        datos a usar los obtenemos con un servicio a una API publica la cual no devuelve un JSON con usuarios, ademas 
+        creamos una interface para estructurar como se van a ver los tipos de datos el codigo de la interface y el servicio los 
+        veremos mas adelante. También hemos creado una pipe.  
+    </p>
+    <br>
+    <mat-paginator 
+        [length]="datos.length"
+        [pageSize]="page_size"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="handlePage($event)"
+        aria-label="Select page" showFirstLastButtons>
+    </mat-paginator>
+    <ul>
+        <li *ngFor="let user of datos | paginate: page_size:page_number">
+            <ul>
+                <li *ngFor="let prop of user | keyvalue">
+                    {{ prop.key }} : {{ prop.value }}
+                 </li>
+            </ul>
+            <br>
+            <br>
+        </li>
+    </ul>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="17">
+        <!--Servicio-->
+        export class ServicioService {
+
+            constructor(private http: HttpClient) { }
+          
+            getLista(): Observable<User[]>{
+              return this.http.get<User[]>('https://jsonplaceholder.typicode.com/todos');
+            }
+          }
+        <!--Interface-->
+        export interface User{
+            userId: number
+            id: number
+            title: string
+            completed: boolean 
+        }
+    </textarea>
+    <br>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="18">
+        <!--Pipe-->
+        @Pipe({
+            name: 'paginate'
+          })
+          export class PaginatePipe implements PipeTransform {
+          
+            transform(array: any[], page_size: any | string, page_number: number): any[] {
+              if(!array.length) return [];
+              if(page_size === 'all'){
+                return array;
+              }
+              page_size = page_size || 5
+              page_number = page_number || 1
+              --page_number
+              return array.slice(page_number * page_size, (page_number+1)*page_size);
+            }
+        }
+    </textarea>
+    <br>
+    <br>
+    <br>
+    <h2>PIPES</h2>
+    <p>Los pipes son como conversores nos permiten convertir un dato a otro dependiendo de sus datos y sus 
+        parametros. 
+    </p>
+    <br>
+    <h3>Pipe simple (UpperCase)</h3>
+    <div>{{ lista[0].nombre | uppercase}}</div>
+    <br>
+    <h3>Pipe normal (Ordenar)</h3>
+    <div>
+        <ul>
+            <li *ngFor="let pelicula of lista | sort">ID: {{ pelicula.id }}, Nombre: {{ pelicula.nombre }}, Precio: {{ pelicula.precio }}</li>
+        </ul>
+    </div>
+    <br>
+    <h3>Pipe complejo (ordenado con parametros)</h3>
+    <div>
+        <ul>
+            <li *ngFor="let pelicula of lista | sortBy: true">ID: {{ pelicula.id }}, Nombre: {{ pelicula.nombre }}, Precio: {{ pelicula.precio }}</li>
+        </ul>
+    </div>
+    <br>
+    <p>En estos ejemplos que hemos visto hemos usado pipes de menos a mas complejidad los codigos de cada uno de ellos son
+        los siguientes: 
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="20">
+        <!--Upper case simple-->
+        transform(value: string): string {
+            //si no existe valor no devuelve nada 
+            if(!value) return '';
+            return value.toUpperCase();
+        }
+        <!--Ordenado -->
+        transform(value: Array<any>): Array<any> {
+            if(!value) return [];
+            return _.sortBy(value, function(pelicula){return pelicula.nombre;});
+        }
+        <!--Ordenado con parametros-->
+        transform(value: Array<any>, reverse: boolean): Array<any> {
+            if(!value) return [];
+            if(reverse){
+              return _.sortBy(value, function(pelicula){return pelicula.nombre;}).reverse();
+            }else{
+              return _.sortBy(value, function(pelicula){return pelicula.nombre;});
+            }
+        }
+    </textarea>
+    <br>
+    <br>
+    
+</div>

@@ -1,0 +1,92 @@
+<h1 class="titulo">ngChanges y SimpleChanges</h1>
+<div class="padre">
+    <p>
+        ¿Qué es SimpleChanges en Angular?
+        SimpleChanges es una característica de Angular / Core que se puede usar para ver los cambios y algunos detalles más 
+        de los nombres de propiedad declarados en un componente. Y también debe usarse en elmétodoAngular ngOnChange para ver 
+        los cambios de valores y hacer cosas relevantes.
+        Simplemente en ngOnChange se dispara cuando se cambian los valores de propiedad declarados. Entonces, en ese método, 
+        podemos establecer esto como un parámetro para almacenar los datos. 
+    </p>
+
+    <h2>Conponente coche</h2>
+    <mat-form-field appearance="fill">
+        <mat-label>Marca de Coche</mat-label>
+        <mat-select [value]="marcaSeleccionada" (selectionChange)= "marcaSeleccionada = $event.value"> 
+          <mat-option *ngFor="let marca of marcas" [value]="marca">
+            {{marca}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <br>
+    <app-coches [marca]="marcaSeleccionada"></app-coches>
+
+    <!--
+        https://www.youtube.com/watch?v=pWPFWwohAMc&list=PLezsbUDiwcpmhNiMzVPYJXV0Rqn71G4PU&index=26
+    -->
+
+    <br>
+    <br>
+    <h3>Codigo del apartado:</h3>
+
+    <textarea class="textArea" name="" id="" cols="110" rows="55">
+        <!--Componente Padre HTML-->
+        <h2>Conponente coche</h2>
+        <mat-form-field appearance="fill">
+            <mat-label>Marca de Coche</mat-label>
+            <mat-select [value]="marcaSeleccionada" (selectionChange)= "marcaSeleccionada = $event.value"> 
+            <mat-option *ngFor="let marca of marcas" [value]="marca">
+                {{'marca'}}
+            </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <br>
+        <app-coches [marca]="marcaSeleccionada"></app-coches>
+
+        <!--Componente Padre .ts-->
+        export class NgOnChangesSimpleChnagesComponent  {
+
+            marcaSeleccionada: string = 'Volvo';
+            marcas: string[] = ['Volvo','Toyota','Mercedes','Renault'];
+          
+          }
+        <!--Componente Hijo (coches) HTML-->
+        Total de Produccion: {{'total'}} unidades
+
+        <!--Componente Hijo .ts-->
+        export class CochesComponent implements OnChanges{
+
+            datos=[
+              {marca: 'Volvo', value: 10},
+              {marca: 'Volvo', value: 20},
+              {marca: 'Toyota', value: 30},
+              {marca: 'Toyota', value: 40},
+              {marca: 'Mercedes', value: 50},
+              {marca: 'Mercedes', value: 60},
+              {marca: 'Renault', value: 70},
+              {marca: 'Renault', value: 80}
+            ]
+          
+            ngOnChanges(changes: SimpleChanges){
+              //si el valor a cambiado realmente 
+              if(changes.marca.currentValue != changes.marca.previousValue){
+                const nuevaMarca = changes.marca.currentValue;
+                const datos = this.datos.filter(dato => dato.marca == nuevaMarca);
+                console.log(datos);
+                this.total= 0;
+                datos.forEach(dato =>this.total += dato.value);
+              }
+            }
+          
+            @Input() marca : string;
+          
+            total: number = 0; 
+          
+          }
+
+    </textarea>
+
+
+</div>

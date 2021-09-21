@@ -1,0 +1,103 @@
+<h1 class="titulo">DECORADOR VIEWCHIILD Y EJEMPLO DE BUSCADOR</h1>
+<div class="padre">
+    <p>
+        En este apartado veremos el uso basico del decorador viewchild para ello hemos creado dos componentes, el padre 
+        y el hijo gracias a este decorador podemos acceder a los componentes ya sean variables, etiquetas del hijo y poder 
+        cambiar el titulo entre otras muchas cosas el codigo de este apartado lo veremos mas abajo: 
+    </p>
+    <br>
+    <p>Damos referencia a una etiqueta con (#)</p>
+    <app-hijo></app-hijo>
+    <button (click)="changeTitle()" mat-raised-button color="primary">Cambiar titulo</button>
+    <br>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="31">
+        <!--Codigo del padre HTML-->
+        <app-hijo></app-hijo>
+        <button (click)="changeTitle()" mat-raised-button color="primary">Cambiar titulo</button>
+
+        <!--Codigo del padre .ts-->
+        //este es para un componente tambien se puede hacer referencia a servicios 
+        @ViewChild(HijoComponent,{static: true}) hijo: HijoComponent;
+
+        constructor() { }
+
+        ngOnInit(): void {
+            console.log(this.hijo);
+        }
+
+        //funcion cambiar titulo
+        changeTitle(){
+            this.hijo.titulo = 'Cmabio titulo componente hijo';
+        }
+        <!--Codigo del hijo HTML-->
+        <p>{{ "titulo" }}</p>
+
+        <!--Codigo del hijo .ts-->
+        export class HijoComponent implements OnInit {
+
+            constructor(private _http: HttpClient) { }
+          
+            ngOnInit(): void {
+            }
+          
+            titulo = 'Componente hijo';
+    </textarea>
+    <br>
+    <br>
+    <p>Cuando usamos viewchild en el componente hijo hemos creado una variable servicio de tipo HttpClient esta misma tambien 
+        sale reflejada en la consola junto con el componente.
+    </p>
+    <br>
+    <br>
+    <h2>Buscador</h2>
+    <p>Para este ejemplo vamos a crear un componente search que hara de buscador despues con el nombre del componente lo 
+        vamos a traer aqui. Despues de subscribirnos al url donde obtenemos el JSON con los datos los mostramos por pantalla 
+        haciendo uso de *ngFor, despues creamos un pipe para transformar los datos a nuestro gusto.   
+    </p>
+    <br>
+    <app-search (search)="handleSearch($event)"></app-search>
+    <br>
+    <ul>
+        <li *ngFor="let usuario of usuarios | buscador: filtro_valor">{{ usuario.name }}</li>
+    </ul>
+    <br>
+    <br>
+    <p>El codigo del buscador consta de un componente search y un pipe: </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="135" rows="31">
+        <!--HTML-->
+        <mat-form-field>
+            <input [formControl]="search" matInput placeholder="Busqueda" spellcheck="false" autocomplete="none">
+        </mat-form-field>
+        <!--.ts-->
+        export class SearchComponent implements OnInit {
+
+            //FormControl es un objeto qué se usa en los formularios para tener un control sobre su valor y su estado en el formulario
+            search = new FormControl('');
+          
+            constructor() { }
+          
+            ngOnInit(): void {
+              //despues con search de FromControl evaluamos los cambio y nos suscribimos obteniendo el valor que se emite o se 
+              //escribe en el input del buscador ademas hacemos que angular espere 300 milisegundos hasta que lo procesa 
+              this.search.valueChanges.pipe(debounceTime(300)).subscribe(value => this.searchEmitter.emit(value))
+            }
+          
+            //en el search del input del html todo lo que introduzcamos lo guardamos en la variable searchEitter con el 
+            //EventEmitter que es un objeto que permite emitir un evento en este caso de tipo string 
+            @Output('search') searchEmitter = new EventEmitter<string>();
+          
+        }
+        <!--pipe-->
+        transform(lista: any[], texto: string): any[] {
+            if(!texto) return lista;
+            //sino haremos un filtro de la lista 
+            return lista.filter(user => user.name.toUpperCase().includes(texto.toUpperCase()));
+        }
+    </textarea>
+    <br>
+    <br>
+
+    
+</div>

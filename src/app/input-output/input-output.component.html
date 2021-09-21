@@ -1,0 +1,114 @@
+<h1 class="titulo">Input Output</h1>
+<div class="padre">
+    <p>
+        Se usan para comunicar datos entre componentes padre e hijo utilizando los decoradores input y Output. Para 
+        la realizacion de esta practica hemos creado dos componentes uno es el input-output.component y el otro es 
+        user.component se puede decir que en este caso el componente padre es input-output y el hijo user, con el decorador 
+        @Input haremos que la transmision se haga entre padre he hijo. 
+
+    </p>
+    <br>
+    <app-user [data]="user" (borrar)="borrarUsuario($event)" *ngFor="let user of usuarios"></app-user>
+    <br>
+    <br>
+    <p>Con la propiedad [data]="user" hemos pasado los datos de cada usuario a traves de user lo hemos mapeado con *ngFor, 
+        luego en user.component lo hemos renombrado a user para poder usar estos datos en el archivo user.component asi:
+    </p>
+    <textarea class="textArea" name="" id="" cols="50" rows="3">
+        //Decorador @Input user.component.ts
+        @Input('data') user: any
+    </textarea>
+    <br><br>
+    <p>Ahora tenemos que dar funcionalidad al boton borrar que esta en user.component y que es el hijo y tenemos que comunicarnos 
+        con el padre input-output.component.ts para que lo borre de la lista, y eso lo hacemos con output. de hijo a padre (output)
+        y de padre a hijo (input). Otra cosa a tener en cuenta es la clase eventEmitter implementa objetos capaces de emitir un evento 
+        se llama "EventEmitter". Pertenece al "core" de Angular Para poder emitir eventos personalizados necesitaremos crear una propiedad 
+        en el componente, donde instanciar un objeto de esta clase (new EventEmitter). Solo que este proceso tiene un detalle que lo puede 
+        complicar un poco, al menos al principio, ya que hace uso de los "generics" de TypeScript.Básicamente, el genérico nos sirve para 
+        decirle a TypeScript el tipo del dato que nuestro evento personalizado escalará hacia el padre en su comunicación. Este es el código 
+        que podríamos utilizar para crear nuestra propiedad emisora de eventos, haciendo uso del generics todo el codigo es el siguiente: 
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="110" rows="4">
+        <!--Componente padre-->
+        <app-user [data]="user" (borrar)="borrarUsuario($event)" *ngFor="let user of usuarios"></app-user>
+    </textarea>
+    <br>
+    <br>
+    <p>Empezaremos explicando (borrar)="borrarUsuario($event)", esta funcion esta declarada en el componente 
+        padre input-output.component.ts, cuya funcion filtra los usuarios que hay introducidos en la variable usuarios y
+        elimina el usuario que coincide con su boton a traves de su id. *ngFor recorre los datos donde se guardan
+        todos los usuarios, [data]="user" es un atributo que le pasamos desde el input el codigo es el siguiente: 
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="50" rows="5">
+        //Componente hijo 
+        //Decorador @Input user.component.ts
+        @Input('data') user: any
+        @Output() borrar = new EventEmitter<number>() 
+    </textarea>
+    <p>
+        El 'data' es el nombre con el que se reconoce este codigo se situa en el componente hijo user.component.ts, tambien 
+        tenemos el Output para comunicarnos con el padre para ello hacemos uso de la clase EventEmitter explicado anteriormente.
+        Tambien esta la funcion borrarUsuario la cual a traves del su nombre borrar emite un evento al html de este mismo componente 
+        la funcion y el el odigo html es el siguiente:  
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="50" rows="5">
+        //funcion que borra un usuario 
+        BorrarUsuario(id: number){
+            this.borrar.emit(id)
+        }
+    </textarea>
+    <br>
+    <br>
+    <textarea class="textArea" name="" id="" cols="120" rows="4">
+        <!--user.component.html-->
+        <div class="left">{{ "user.username" }}</div>
+        <div class="right"><button (click)="BorrarUsuario(user.id)" mat-raised-button color="warn">Borrar</button></div>
+    </textarea>
+    <br>
+    <h2>Otro Ejemplo</h2>
+    <p>Para dejar las cosas mas claras el decorador @Input se usa para indicarle a un componente que puede 
+        recibir un valor desde el componente padre. Y el decorador @Output permite emitir un valor desde el componente 
+        hijo que puede ser escuchado por el componente padre. Por ello en el componente hijo se decalara el input con el tipo 
+        de dato que va a recibir del padre   
+    </p>
+    <br>
+    <p>Hola soy el componente padre</p>
+    <p>Hola soy el padre y el mensaje que me da mi hijo es: {{ mensajeHijo }}</p>
+    <app-in-out2 [texto]="'Hola soy el padre'" (eventoHijo)="onMensajeHijo($event)"></app-in-out2>
+    <br>
+    <br>
+    <p>Todo el codigo del ejemplo es el siguiente:</p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="120" rows="26">
+        <!--Componente Hijo-->
+        <!--Decoradores-->
+        @Input() texto: string;
+        @Output() eventoHijo = new EventEmitter<string>()
+        <!--Funcion que envia el mensaje-->
+        enviarPadre(){
+            this.eventoHijo.emit("evento Hijo!!!")
+        }
+        <!--HTML del hijo-->
+        <p>Soy el componente Hijo</p>
+        <p>Mi padre me via un mesaje que es: {{ "texto" }}</p>
+        <button (click)="enviarPadre()" mat-raised-button color="primary">enviarPadre</button>
+
+        <!--Componente padre HTML-->
+        <!--Selector del componente Hijo-->
+        <!--[texto] es el mensaje que manda el padre @input y (eventoHijo) mensaje que manda el hijo -->
+        <p>Hola soy el componente padre</p>
+        <p>Hola soy el padre y el mensaje que me da mi hijo es: {{ mensajeHijo }}</p>
+        <app-in-out2 [texto]="'Hola soy el padre'" (eventoHijo)="onMensajeHijo($event)"></app-in-out2>
+        <!--variable -->
+        mensajeHijo: string
+        <!--Recibe el evento del hijo $event = evento hijo!!-->
+        onMensajeHijo(mensaje){
+            this.mensajeHijo = mensaje;
+        }
+    </textarea>
+    <br>
+    <br>
+</div>

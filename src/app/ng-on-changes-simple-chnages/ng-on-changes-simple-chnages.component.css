@@ -1,0 +1,26 @@
+.titulo{
+    text-align: center;
+    margin-top: 20px;
+    font-size: 35px;
+}
+
+.padre{
+    height: 100vh;
+    margin-left: 35px;
+    margin-right: 35px;
+    
+}
+
+
+.nivel{
+    margin-left: 188px;
+    font-size: 20px;
+}
+
+.textArea{
+    border: thin solid rgb(170, 170, 170);
+    background-color: rgb(236, 234, 234);
+    text-align: justify;
+}
+
+

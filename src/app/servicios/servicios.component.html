@@ -1,0 +1,137 @@
+<h1 class="titulo">Servicios</h1>
+<div class="padre">
+    <p>
+        Los servicios son archivos de typscript que nos permiten comunicar los componentes, para ello creamos 
+        una carpeta llamada servicios y dentro creamos dos servicios uno de api y otro user a traves del comando 
+        ng generate service servicios/services/api y para user de la misma manera. Para hacer este ejemplo de servicios 
+        usaremos como ejemplo un login tradicional. Realizamos una funciona login() la cual ira en el archivo html en el boton.
+        Los servicios serán consumidos por los componentes, que delegarán en ellos la responsabilidad de acceder a la 
+        información y la realización de operaciones con los datos. Podemos aprender mas de angular en 
+        https://desarrolloweb.com/articulos/servicios-angular.html
+    </p>
+    <br>
+    <p>Introduce Usuario y contraseña para poder realizar esta practica.</p>
+    <br>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Usuario</mat-label>
+        <input id="usuario" matInput placeholder="Ej. Alfonso">
+    </mat-form-field>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Contraseña</mat-label>
+        <input id="password" matInput placeholder="123alf">
+    </mat-form-field>
+    <br>
+    <button (click)="login()" mat-raised-button color="primary">Iniciar sesion</button>
+    <br>
+    <br>
+    <p>
+        Hasta ahora lo que hemos hecho ha sido crear los dos servicios, una carpeta Others con un ts llamado interfaces.ts
+        en la cual hemos creado los siguiente: 
+    </p>
+    <br>
+    <textarea class="textArea" name="" id="" cols="40" rows="17">
+        export interface LoginResponse{
+            succes: boolean
+            user: User
+            token: string
+        
+        }
+        export interface User{
+            name: string
+            avatar: string
+            level: number
+            points: number
+            chievements: any[]
+            _id: string
+            type: string
+            user: string
+            email: string
+        }
+    </textarea>
+    <br>
+    <br>
+    <p>En la practica anterior hemos usado el metodo post para mandar informacion al servidor y hacer lo que queramos
+        en este caso hemos añadido usuarios a la base de datos de placeholder a traves del formulario usuario y contraseña
+        Ahora vamos a ver el metodo get que es donde pedimos al servidor que nos devuelva los datos en formato JSON para poder
+        verlos en pantalla o consola, tambien para crear un servicio correctamente hemos usado los siguientes archivos: 
+        el componente servicios yo lo he llamado asi pero lo puedes llamar como tu quieras a parte hemos creado una carpeta 
+        llamada service en la cual hemos creado los archivos api.service.ts y user.service.ts. En el archivo api creamos una funcion 
+        login mediante la cual hacemos la peticion al servidor y este nos devuelve la informacion y en el archivo user creamos 
+        una variable con el tipo de informacion que nos va a devolver para ello creamos una interface con el tipo de datos 
+        en javascript usando la siguiente pagina https://app.quicktype.io/?l=ts el codigo de todo ello es el siguiente:
+    </p>
+    <br>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="10">
+        <!--servicios.ts-->
+        login(){
+            const user = (document.querySelector('#usuario') as HTMLInputElement).value
+            const username = (document.querySelector('#password')  as HTMLInputElement).value
+            this._api.login(user, username).subscribe(response =>{
+            
+              this._user.user2=response
+              console.log(this._user.user2)
+        
+            })//fin suscribe
+          }
+    </textarea>
+    <br>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="28">
+        <!--api.service.ts-->
+        import { Injectable } from '@angular/core';
+        import { Observable } from 'rxjs';
+        import { LoginResponse } from 'src/app/Others/interfaces';
+        import { HttpClient} from '@angular/common/http';
+
+        @Injectable({
+        providedIn: 'root'
+        })
+        export class ApiService {
+
+        //importamos un servicio que ya viene con angular
+        constructor(private _http: HttpClient) { }
+
+        api_url: string= 'https://jsonplaceholder.typicode.com/users'
+
+        login(user: string, username: string): Observable<LoginResponse>{
+            //ponemos un poco de encriptacion para la contraseña 
+            //password = btoa(password)
+            //Nos devuelve la respuesta del backend
+            return this._http.post<LoginResponse>(`${this.api_url}`,{user: user, username: username})
+        }
+
+        //Pedmiso los datos a la API a traves de get 
+        login2(){
+            return this._http.get(`${this.api_url}`)
+        }
+    </textarea>
+    <br>
+    <br>
+    <textarea class="textArea" name="" id="" cols="100" rows="12">
+        <!--user.service.ts-->
+        export class UserService {
+
+            constructor() { }
+          
+            //Estas variables las usamos cuando el metodo post actua y coloca en estas declaraciones 
+            //de variables los valores que el usuario a introducido 
+            user:string;
+            username: string;
+            user2: LoginResponse;
+          }
+    </textarea>
+    <br>
+    <br>
+    <p>En la primera porcion de codigo hay una funcion login en la cual obtenemos los valores de los campos
+        usuario y contraseña y despues llamamos a una segunda funcion login() la cual es la que esta en el archivo 
+        api.service.ts la cual recibe esos parametros la de usuario y contraseña los cuales mediante post son enviados 
+        al servidor y agrega un nuevo usuario ademas hemos al obtener esos datos añadimos en nuestra estructura o variable 
+        creada en el ultimo codigo el valor del nombre y el username.
+    </p>
+    <br>
+    <br>
+</div>
+
+
+

@@ -1,0 +1,17 @@
+
+:host{
+    display: flex;
+    justify-content: space-between;
+    line-height: 20px;
+    margin: 10px 0;
+}
+
+.left, .right{
+    flex: 1;
+    
+}
+
+button{
+    margin-right: 1000px;
+}
+

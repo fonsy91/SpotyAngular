@@ -1,0 +1,130 @@
+<h1 class="titulo">Atributos, Eventos y ngModel</h1>
+<div class="padre">
+    <p>
+        Para entender esto un atributo en HTML son los modificadores que acompañan a las etiquetas como la palabra 
+        class cuando damos una clase a una etiqeta (class="seccionPadre"), pero los atributos en el contexto angular a menudo
+        se usa la palabra "atributo" como "propiedad" pero no siempre los usa de esa manera. Hay que tener cuidado para no producir 
+        ningun mensaje de error a la hora de crear atributos ya que si no saldran mensajes de error. Algunos atributos los podemos ver
+        en la suigiente direccion: https://www.w3schools.com/tags/tag_button.asp y los eventos aqui: https://www.w3schools.com/tags/ref_eventattributes.asp
+        Estos atributo y eventos siempre van dentro de corchetes. Tambien veremos ngModel que es un atributo para formularios que sirve 
+        tanto de atributo como de evento para ello hay que importar en al module.ts FormsModule y con esto importamos el codigo que 
+        pertence a ngModel se puede utilizar de tres formas solo como atributo, solo como evento o con los dos. Si la asignamos como 
+        atributo (entre corchetes) al escribir un valor en el .ts se asignaria ese valor en la pantalla, pero si lo asigno 
+        como evento (entre parentesis) al escribir algo en el input se asiganria ese valor a la variable y si quremos usarlo para ambos 
+        como evento y como atributo sereia [(ngModel)] esto haria que se sincronize con el componente ahora veremos de una manera mas 
+        detallada como es todo esto que hemos hablado.
+        
+    </p>
+
+    <section>
+        <br>
+        <button class="btn1" [type]="tipo" [disabled]="desactivado" mat-raised-button color="primary">Boton</button>
+        <button (click)="desactivado=!desactivado" mat-raised-button color="primary">Cambiar desactivado</button>
+        <br>
+        <br>
+        <p>Asignandolo como evento y como atributo se guardara lo que escribamos en la variable de .ts y ademas saldra por pantalla,
+            ademas si queremos ver que se a guardado en la variable abriendo la consola se vera el valor escrito. Esto solo
+            sucedera cuando apretemos el boton asignar variable. </p>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Comida favorita</mat-label>
+            <input [(ngModel)]="titulo" matInput placeholder="Ex. Pizza">
+        </mat-form-field>
+        <br>
+        <button (click)="PonerTitulo()" mat-raised-button color="primary">Asignar a variable</button>
+        <br>
+        <br>
+        <p>El titulo introducido en el imput es: {{ titulo }}</p>
+        <br><br>
+        <!--**************************TEXTAREA****************************************************************-->
+        <!--**************************************************************************************************-->
+        <textarea class="textArea" name="" id="" cols="122" rows="13">
+        <br>
+        <button class="btn1" [type]="tipo" [disabled]="desactivado" mat-raised-button color="primary">Boton</button>
+        <button (click)="desactivado=!desactivado" mat-raised-button color="primary">Cambiar desactivado</button>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Comida favorita</mat-label>
+            <input [(ngModel)]="titulo" matInput placeholder="Ex. Pizza">
+        </mat-form-field>
+        <br>
+        <button (click)="PonerTitulo()" mat-raised-button color="primary">Asignar a variable</button>
+        <br>
+        <br>
+        <p>El titulo introducido en el imput es: {{ titulo }}</p>
+        </textarea>
+        <!--**************************************************************************************************-->
+        <!--**************************************************************************************************-->
+        <br><br>
+        <p>Si lo asignamos entre corchetes lo que asignemos en el .ts se asignara en la pantalla como se puede ver sale el nombre de
+            la comida directamente en el input ya que previamente ya se ha asigando.</p>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Comida favorita</mat-label>
+            <input [ngModel]="titulo2" matInput placeholder="Ex. Pizza">
+        </mat-form-field>
+        <br>
+        <br>
+        <!--**************************TEXTAREA****************************************************************-->
+        <!--**************************************************************************************************-->
+        <textarea class="textArea" name="" id="" cols="77" rows="5">
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Comida favorita</mat-label>
+                <input [ngModel]="titulo2" matInput placeholder="Ex. Pizza">
+            </mat-form-field>
+        </textarea>
+        <!--**************************************************************************************************-->
+        <!--**************************************************************************************************-->
+        <br><br>
+        <p>DebounceTime usado con getElementById, para ello usamos una funcion la cual se puede ver debajo, para 
+            poder apreciar este funcionamineto se debe encender la consola del navegador, cabe destacar que para poder 
+            usar el debounce se deben importar las librerias FromEvent de rxjs, map y debounceTime de rxjs/operators: </p>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Comida favorita</mat-label>
+            <!--
+                Obtenemos el elemento a partir de getelement byId 
+            -->
+            <input id="comida" matInput placeholder="Ex. Pizza">
+        </mat-form-field>
+        <br>
+        <!--**************************TEXTAREA****************************************************************-->
+        <!--**************************************************************************************************-->
+        <textarea class="textArea" name="" id="" cols="77" rows="8">
+            capturarInput(){
+                const comida = document.getElementById('comida');
+                const keyup = fromEvent(comida, 'keyup');
+                keyup.pipe(
+                  map((e: any) => e.currentTarget.value), debounceTime(1000)
+                ).subscribe(console.log);
+              }
+        </textarea>
+        <!--**************************************************************************************************-->
+        <!--**************************************************************************************************-->
+        <br>
+        <br>
+        <p>ngModelChange: todo lo que escribimos en el input aparece por consola</p>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Comida favorita</mat-label>
+                <!--
+                verlo segun el ngModelChange 
+                -->
+                <input [ngModel]="titulo3" (ngModelChange)="log($event)" matInput placeholder="Ex. Pizza">
+        </mat-form-field>
+        <br><br>
+        <textarea class="textArea" name="" id="" cols="103" rows="3">
+            <input [ngModel]="titulo3" (ngModelChange)="log($event)" matInput placeholder="Ex. Pizza">
+        </textarea>
+        <br>
+        <br>
+        <h2>Eventos</h2>
+        <p>
+            A continuación se muestran los atributos de eventos globales que se pueden agregar a los elementos HTML para definir acciones de eventos.
+            en esta direcion puedes ver todos los eventos disponibles: https://www.w3schools.com/tags/ref_eventattributes.asp 
+        </p>
+
+        <h2>Atributos</h2>
+        <p>
+            A continuación se muestran los atributos de eventos globales que se pueden agregar a los elementos HTML para definir acciones de eventos.
+            en esta direcion puedes ver todos los eventos disponibles: https://www.w3schools.com/tags/tag_button.asp
+        </p>
+        <br><br>
+
+
+    </section>
